@@ -1,7 +1,7 @@
-Active Record MultiTenant Extension
-=====================================
+Settings Extension
+===================
 
-This extension provides support for ActiveRecord MultiTenant.
+This extension provides support for persistent settings for Yii2.
 
 [![Build Status](https://travis-ci.org/solutosoft/yii-settings.svg?branch=master)](https://travis-ci.org/solutosoft/yii-multitenant)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/solutosoft/yii-settings/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/solutosoft/yii-multitenant/?branch=master)
@@ -17,11 +17,11 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist solutosoft/yii-multitenant
+php composer.phar require --prefer-dist solutosoft/yii-settings
 ```
 
 or add
 
 ```json
-"solutosoft/yii-multitenant": "*"
+"solutosoft/yii-settings": "*"
 ```

@@ -40,11 +40,7 @@ class SettingsTest extends TestCase
     public function testEvents()
     {
         $settings = new Settings([
-            'on beforeFind' => function ($event) {
-                $event->columns = ['user_id' => 1];
-            },
-
-            'on beforeSave' => function ($event) {
+            'on beforeExecute' => function ($event) {
                 $event->columns = ['user_id' => 1];
             }
         ]);

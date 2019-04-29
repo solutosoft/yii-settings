@@ -7,19 +7,12 @@ use yii\base\Component;
 use yii\db\Connection;
 use yii\db\Query;
 
-
 class Settings extends Component
 {
     /**
-     * @event ModelEvent an event that is triggered before inserting a record.
-     * You may set [[ModelEvent::isValid]] to be `false` to stop the insertion.
+     * @event SettingsEvent an event that is triggered before execute command.
      */
-    const EVENT_BEFORE_FIND = 'beforeFind';
-    /**
-     * @event ModelEvent an event that is triggered before inserting a record.
-     * You may set [[ModelEvent::isValid]] to be `false` to stop the insertion.
-     */
-    const EVENT_BEFORE_SAVE = 'beforeSave';
+    const EVENT_BEFORE_EXECUTE = 'beforeExecute';
 
     /**
      * @var string Name of the table where configurations will be stored
@@ -59,7 +52,6 @@ class Settings extends Component
     /**
      * Returns configuration value from database
      * @param string $name configuration name
-     * @param mixed $defaultValue the default value to be returned when the session variable does not exist.
      * @return string value stored in database
      */
     public function get($name, $defaultValue = null)
@@ -81,14 +73,13 @@ class Settings extends Component
      * Store configuration value to database
      * @param string $name
      * @param mixed $value
-     * @param integer $tenantId The tenant id value
      */
-    public function set($name, $value, $tenantId = null)
+    public function set($name, $value)
     {
         $db = $this->getDb();
 
         $event = new SettingsEvent();
-        $this->trigger(self::EVENT_BEFORE_SAVE, $event);
+        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
 
         $columns = array_merge($event->columns, [$this->valueColumnName => $value]);
         $where = array_merge($event->columns, [$this->keyColumnName => $name]);
@@ -152,7 +143,7 @@ class Settings extends Component
         }
 
         $event = new SettingsEvent();
-        $this->trigger(self::EVENT_BEFORE_FIND, $event);
+        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
 
         if ($event->columns) {
             $where = array_merge($event->columns, $where);
@@ -176,7 +167,7 @@ class Settings extends Component
             ->from($this->tableName);
 
         $event = new SettingsEvent();
-        $this->trigger(self::EVENT_BEFORE_FIND, $event);
+        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
 
         if ($event->columns) {
             $query->andWhere($event->columns);

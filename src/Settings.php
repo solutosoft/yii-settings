@@ -87,7 +87,7 @@ class Settings extends Component
     {
         $db = $this->getDb();
 
-        $event = new SaveEvent();
+        $event = new SettingsEvent();
         $this->trigger(self::EVENT_BEFORE_SAVE, $event);
 
         $columns = array_merge($event->columns, [$this->valueColumnName => $value]);
@@ -151,11 +151,11 @@ class Settings extends Component
             $where = [$this->keyColumnName => $names];
         }
 
-        $event = new ConditionEvent();
+        $event = new SettingsEvent();
         $this->trigger(self::EVENT_BEFORE_FIND, $event);
 
-        if ($event->condition) {
-            $where = array_merge($event->condition, $where);
+        if ($event->columns) {
+            $where = array_merge($event->columns, $where);
         }
 
         $this->getDb()
@@ -175,11 +175,11 @@ class Settings extends Component
             ->select([$this->valueColumnName])
             ->from($this->tableName);
 
-        $event = new ConditionEvent();
+        $event = new SettingsEvent();
         $this->trigger(self::EVENT_BEFORE_FIND, $event);
 
-        if ($event->condition) {
-            $query->andWhere($event->condition);
+        if ($event->columns) {
+            $query->andWhere($event->columns);
         }
 
         if ($name) {

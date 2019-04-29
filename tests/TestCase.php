@@ -94,7 +94,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $db->createCommand()->createTable('settings', [
             'key' => 'key',
             'value' => 'text',
-            'tenant_id' => 'integer'
+            'user_id' => 'integer'
         ])->execute();
     }
 

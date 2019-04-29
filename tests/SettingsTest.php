@@ -3,6 +3,7 @@
 namespace Soluto\Settings\Tests;
 
 use Soluto\Settings\Settings;
+use yii\db\Query;
 
 class SettingsTest extends TestCase
 {
@@ -34,5 +35,33 @@ class SettingsTest extends TestCase
 
         $settings->delete(['key2', 'key3', 'key4']);
         $this->assertEmpty($settings->all());
+    }
+
+    public function testEvents()
+    {
+        $settings = new Settings([
+            'on beforeFind' => function ($event) {
+                $event->columns = ['user_id' => 1];
+            },
+
+            'on beforeSave' => function ($event) {
+                $event->columns = ['user_id' => 1];
+            }
+        ]);
+
+        $settings->set('website', 'http://example.org');
+
+        $query = (new Query())
+            ->from($settings->tableName)
+            ->where(['user_id' => 1]);
+
+        $rows = $query->all();
+
+        $this->assertCount(1, $rows);
+        $this->assertEquals([
+            'key' => 'website' ,
+            'value' => 'http://example.org',
+            'user_id' => 1
+        ], $rows[0]);
     }
 }

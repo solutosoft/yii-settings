@@ -2,10 +2,12 @@
 
 namespace Soluto\Settings;
 
+use yii\base\Event;
+
 /**
- * SaveEvent represents the parameter needed by [[Settings]] save events.
+ * SettingsEvent represents the parameter needed by [[Settings]] events.
  */
-class SaveEvent extends ConditionEvent
+class SettingsEvent extends Event
 {
     /**
      * @param array $columns the column data (name => value) to be updated.

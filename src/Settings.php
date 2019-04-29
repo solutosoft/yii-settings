@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Component;
 use yii\db\Connection;
 use yii\db\Query;
+use yii\base\Event;
 
 class Settings extends Component
 {
@@ -77,19 +78,23 @@ class Settings extends Component
     public function set($name, $value)
     {
         $db = $this->getDb();
+        $values = [$this->valueColumnName => $value];
+        $where = [$this->keyColumnName => $name];
 
-        $event = new SettingsEvent();
+        $event = new Event();
         $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
 
-        $columns = array_merge($event->columns, [$this->valueColumnName => $value]);
-        $where = array_merge($event->columns, [$this->keyColumnName => $name]);
+        if ($event->data) {
+            $values = array_merge($event->data, $values);
+            $where = array_merge($event->data, $where);
+        }
 
         if ($this->exists($name)) {
             $db->createCommand()
-                ->update($this->tableName, $columns, $where)
+                ->update($this->tableName, $values, $where)
                 ->execute();
         } else  {
-            $values = array_merge([$this->keyColumnName => $name], $columns);
+            $values = array_merge($values, $where);
 
             $db->createCommand()
                 ->insert($this->tableName, $values)
@@ -142,11 +147,11 @@ class Settings extends Component
             $where = [$this->keyColumnName => $names];
         }
 
-        $event = new SettingsEvent();
+        $event = new Event();
         $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
 
-        if ($event->columns) {
-            $where = array_merge($event->columns, $where);
+        if ($event->data) {
+            $where = array_merge($event->data, $where);
         }
 
         $this->getDb()
@@ -166,11 +171,11 @@ class Settings extends Component
             ->select([$this->valueColumnName])
             ->from($this->tableName);
 
-        $event = new SettingsEvent();
+        $event = new Event();
         $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
 
-        if ($event->columns) {
-            $query->andWhere($event->columns);
+        if ($event->data) {
+            $query->andWhere($event->data);
         }
 
         if ($name) {

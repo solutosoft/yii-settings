@@ -19,8 +19,8 @@ class SettingsTest extends TestCase
     {
         $settings = new Settings();
 
-        $settings->set('key1', 1);
-        $this->assertEquals(1, $settings->get('key1'));
+        $settings->set('key1', 999);
+        $this->assertEquals(999, $settings->get('key1'));
 
         $settings->set('key1', 'test');
         $this->assertEquals('test', $settings->get('key1'));
@@ -41,7 +41,7 @@ class SettingsTest extends TestCase
     {
         $settings = new Settings([
             'on beforeExecute' => function ($event) {
-                $event->columns = ['user_id' => 1];
+                $event->data = ['user_id' => 1];
             }
         ]);
 

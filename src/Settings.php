@@ -81,9 +81,7 @@ class Settings extends Component
         $values = [$this->valueColumnName => $value];
         $where = [$this->keyColumnName => $name];
 
-        $event = new Event();
-        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
-
+        $event = $this->beforeExecute();
         if ($event->data) {
             $values = array_merge($event->data, $values);
             $where = array_merge($event->data, $where);
@@ -139,7 +137,7 @@ class Settings extends Component
      * @param array|string $names
      * @param integer $tenantId
      */
-    public function delete($names = [])
+    public function remove($names = [])
     {
         if (is_array($names)) {
             $where = ['IN', $this->keyColumnName, $names];
@@ -147,9 +145,7 @@ class Settings extends Component
             $where = [$this->keyColumnName => $names];
         }
 
-        $event = new Event();
-        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
-
+        $event = $this->beforeExecute();
         if ($event->data) {
             $where = array_merge($event->data, $where);
         }
@@ -171,8 +167,7 @@ class Settings extends Component
             ->select([$this->valueColumnName])
             ->from($this->tableName);
 
-        $event = new Event();
-        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
+        $event = $this->beforeExecute();
 
         if ($event->data) {
             $query->andWhere($event->data);
@@ -183,6 +178,17 @@ class Settings extends Component
         }
 
         return $query;
+    }
+
+    /**
+     * This method is called at the before execute db command
+     * @return yii\base\Event
+     */
+    protected function beforeExecute()
+    {
+        $event = new Event();
+        $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
+        return $event;
     }
 
 }

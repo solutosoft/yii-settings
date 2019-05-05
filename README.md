@@ -25,3 +25,67 @@ or add
 ```json
 "solutosoft/yii-settings": "*"
 ```
+
+Configuration
+-------------
+
+To use the Setting Component, you need to configure the components array in your application configuration:
+```php
+'components' => [
+    'settings' => [
+        'class' => 'Soluto\Settings\Settings',
+    ],
+],
+```
+
+Usage:
+---------
+```php
+$settings = Yii::$app->settings;
+
+$settings->set('key');
+
+$settings->set('section.key');
+
+// Checking existence of setting
+$settings->exists('key');
+
+// Removes a setting
+$settings->remove('key');
+
+// Removes all settings
+$settings->remove();
+
+```
+
+Events
+------
+
+You can use to store extra values and apply extra conditions to execute query
+
+```php
+<?php
+
+'components' => [
+    'settings' => [
+        'class' => 'Soluto\Settings\Settings',
+        'on beforeExecute' => function ($event) {
+            $event->data = ['user_id' => Yii::$app->user->id];
+        }
+    ],
+],
+
+$settings = Yii::$app->settings;
+
+//INSERT (`key`,`value`, `user_id`) INTO `setting` VALUES ('website', 'http://example.org', 1)
+$settings->set('website', 'http://example.org');
+
+
+//SELECT `value` FROM `setting` WHER (`settings`.`key` = 'website' and `settings`.`user_id` = 1)
+$settings->get('website', 'http://example.org');
+
+```
+
+
+
+

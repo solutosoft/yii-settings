@@ -30,10 +30,10 @@ class SettingsTest extends TestCase
         $settings->save(['key3' => 'value3', 'key4' => 'value4']);
         $this->assertCount(3, $settings->all());
 
-        $settings->delete('key1');
+        $settings->remove('key1');
         $this->assertCount(2, $settings->all());
 
-        $settings->delete(['key2', 'key3', 'key4']);
+        $settings->remove(['key2', 'key3', 'key4']);
         $this->assertEmpty($settings->all());
     }
 

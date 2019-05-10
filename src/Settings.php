@@ -18,7 +18,7 @@ class Settings extends Component
     /**
      * @var string Name of the table where configurations will be stored
      */
-    public $tableName = '{{%settings}}';
+    public $tableName = '{{%setting}}';
 
     /**
      * @var string Name of column where keys will be stored

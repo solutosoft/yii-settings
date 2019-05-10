@@ -91,7 +91,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         $db = Yii::$app->getDb();
 
-        $db->createCommand()->createTable('settings', [
+        $db->createCommand()->createTable('setting', [
             'key' => 'key',
             'value' => 'text',
             'user_id' => 'integer'

@@ -1,5 +1,5 @@
-Settings Extension
-===================
+Yii Settings Extension
+======================
 
 This extension provides support for persistent settings for Yii2.
 
@@ -30,6 +30,7 @@ Configuration
 -------------
 
 To use the Setting Component, you need to configure the components array in your application configuration:
+
 ```php
 'components' => [
     'settings' => [
@@ -56,7 +57,6 @@ $settings->remove('key');
 
 // Removes all settings
 $settings->remove();
-
 ```
 
 Events

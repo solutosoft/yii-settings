@@ -40,6 +40,7 @@ To use the Setting Component, you need to configure the components array in your
 
 Usage:
 ---------
+
 ```php
 $settings = Yii::$app->settings;
 

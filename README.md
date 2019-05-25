@@ -1,5 +1,5 @@
-Settings Extension
-===================
+Yii Settings Extension
+======================
 
 This extension provides support for persistent settings for Yii2.
 
@@ -30,6 +30,7 @@ Configuration
 -------------
 
 To use the Setting Component, you need to configure the components array in your application configuration:
+
 ```php
 'components' => [
     'settings' => [
@@ -40,6 +41,7 @@ To use the Setting Component, you need to configure the components array in your
 
 Usage:
 ---------
+
 ```php
 $settings = Yii::$app->settings;
 
@@ -55,13 +57,12 @@ $settings->remove('key');
 
 // Removes all settings
 $settings->remove();
-
 ```
 
 Events
 ------
 
-You can use to store extra values and apply extra conditions to execute query
+You can use `beforeExecute` event to store extra values and apply extra conditions on command execution
 
 ```php
 <?php
@@ -79,7 +80,6 @@ $settings = Yii::$app->settings;
 
 //INSERT (`key`,`value`, `user_id`) INTO `setting` VALUES ('website', 'http://example.org', 1)
 $settings->set('website', 'http://example.org');
-
 
 //SELECT `value` FROM `setting` WHER (`settings`.`key` = 'website' and `settings`.`user_id` = 1)
 $settings->get('website', 'http://example.org');

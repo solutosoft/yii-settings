@@ -33,7 +33,7 @@ class SettingsTest extends TestCase
         $settings->remove('key1');
         $this->assertCount(2, $settings->all());
 
-        $settings->remove(['key2', 'key3', 'key4']);
+        $settings->removeAll();
         $this->assertEmpty($settings->all());
     }
 

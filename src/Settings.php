@@ -133,22 +133,31 @@ class Settings extends Component
     }
 
     /**
-     * Deletes specified configurations (or all if none specified) from the parameters table
-     * @param array|string $names
-     * @param integer $tenantId
+     * Remove specified setting
+     * @param array|string $name
      */
-    public function remove($names = [])
+    public function remove($name)
     {
-        if (is_array($names)) {
-            $where = ['IN', $this->keyColumnName, $names];
-        } else {
-            $where = [$this->keyColumnName => $names];
-        }
+        $where = [$this->keyColumnName => $name];
 
         $event = $this->beforeExecute();
         if ($event->data) {
             $where = array_merge($event->data, $where);
         }
+
+        $this->getDb()
+            ->createCommand()
+            ->delete($this->tableName, $where)
+            ->execute();
+    }
+
+    /**
+     * Removes all settings
+     */
+    public function removeAll()
+    {
+        $event = $this->beforeExecute();
+        $where = $event->data ? $event->data : '';
 
         $this->getDb()
             ->createCommand()

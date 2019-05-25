@@ -5,6 +5,7 @@ Yii Settings Change Log
 -----------------------
 
 - Added `removeAll` method
+- Added settings cache
 
 1.0.1 May 10, 2019
 ------------------

@@ -15,6 +15,11 @@ class Settings extends Component
      */
     const EVENT_BEFORE_EXECUTE = 'beforeExecute';
 
+    /*
+     * @var array The settings cache
+     */
+    private $_data = [];
+
     /**
      * @var string Name of the table where configurations will be stored
      */
@@ -39,24 +44,31 @@ class Settings extends Component
     }
 
     /**
-     * Whether the configuration exists in the database
-     * @param string $name configuration name
-     * @param integer $tenantId The tenant id value
+     * Whether the setting exists in the database
+     * @param string $name the setting name
      * @return bool
      */
     protected function exists($name)
     {
+        if (isset($this->_data[$name])) {
+            return true;
+        }
+
         $query = $this->createQuery($name);
         return $query->exists();
     }
 
     /**
-     * Returns configuration value from database
-     * @param string $name configuration name
-     * @return string value stored in database
+     * Returns setting value from database
+     * @param string $name setting name
+     * @return mixed $defaultValue
      */
     public function get($name, $defaultValue = null)
     {
+        if (isset($this->_data[$name])) {
+            return $this->_data[$name];
+        }
+
         $value = null;
         $query = $this->createQuery($name);
         $row = $query->one($this->getDb());
@@ -67,11 +79,16 @@ class Settings extends Component
             $value = null;
         }
 
-        return ($value !== null) ? $value : $defaultValue;
+        if ($value === null) {
+            $value = $defaultValue;
+        }
+
+        $this->_data[$name] = $value;
+        return $value;
     }
 
     /**
-     * Store configuration value to database
+     * Store setting value to database
      * @param string $name
      * @param mixed $value
      */
@@ -98,11 +115,12 @@ class Settings extends Component
                 ->insert($this->tableName, $values)
                 ->execute();
         }
+
+        $this->_data[$name] = $value;
     }
 
     /**
-     * Retrieves all configurations stored in database
-     * @param integer $tenantId
+     * Retrieves all setting stored in database
      * @return array
      */
     public function all()
@@ -115,14 +133,18 @@ class Settings extends Component
         $rows = $query->all($this->getDb());
 
         foreach ($rows as $row) {
-            $result[$row[$this->keyColumnName]] = $row[$this->valueColumnName];
+            $value = $row[$this->valueColumnName];
+            $name = $row[$this->keyColumnName];
+
+            $result[$name] = $value;
+            $this->_data[$name] = $value;
         }
 
         return $result;
     }
 
     /**
-     * Store all configuration in database
+     * Store all settings in database
      * @param array $names
      */
     public function save($names)
@@ -149,6 +171,8 @@ class Settings extends Component
             ->createCommand()
             ->delete($this->tableName, $where)
             ->execute();
+
+        unset($this->_data[$name]);
     }
 
     /**
@@ -163,6 +187,8 @@ class Settings extends Component
             ->createCommand()
             ->delete($this->tableName, $where)
             ->execute();
+
+        $this->_data[] = [];
     }
 
     /**

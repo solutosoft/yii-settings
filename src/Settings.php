@@ -7,6 +7,7 @@ use yii\base\Component;
 use yii\db\Connection;
 use yii\db\Query;
 use yii\base\Event;
+use yii\helpers\Json;
 
 class Settings extends Component
 {
@@ -50,11 +51,19 @@ class Settings extends Component
      */
     protected function exists($name)
     {
-        if (isset($this->_data[$name])) {
+        $event = $this->beforeExecute();
+        $key = $this->buildCacheKey($name, $event->data);
+
+        if (isset($this->_data[$key])) {
             return true;
         }
 
         $query = $this->createQuery($name);
+
+        if ($event->data) {
+            $query->andWhere($event->data);
+        }
+
         return $query->exists();
     }
 
@@ -65,12 +74,19 @@ class Settings extends Component
      */
     public function get($name, $defaultValue = null)
     {
-        if (isset($this->_data[$name])) {
-            return $this->_data[$name];
+        $event = $this->beforeExecute();
+        $key = $this->buildCacheKey($name, $event->data);
+
+        if (isset($this->_data[$key])) {
+            return $this->_data[$key];
         }
 
-        $value = null;
         $query = $this->createQuery($name);
+
+        if ($event->data) {
+            $query->andWhere($event->data);
+        }
+
         $row = $query->one($this->getDb());
 
         $value = ($row) ? $row[$this->valueColumnName] : null;
@@ -95,10 +111,12 @@ class Settings extends Component
     public function set($name, $value)
     {
         $db = $this->getDb();
+        $event = $this->beforeExecute();
+
+        $key = $this->buildCacheKey($name, $event->data);
         $values = [$this->valueColumnName => $value];
         $where = [$this->keyColumnName => $name];
 
-        $event = $this->beforeExecute();
         if ($event->data) {
             $values = array_merge($event->data, $values);
             $where = array_merge($event->data, $where);
@@ -116,7 +134,7 @@ class Settings extends Component
                 ->execute();
         }
 
-        $this->_data[$name] = $value;
+        $this->_data[$key] = $value;
     }
 
     /**
@@ -126,6 +144,7 @@ class Settings extends Component
     public function all()
     {
         $result = [];
+        $event = $this->beforeExecute();
 
         $query = $this->createQuery()
             ->addSelect($this->keyColumnName);
@@ -135,9 +154,10 @@ class Settings extends Component
         foreach ($rows as $row) {
             $value = $row[$this->valueColumnName];
             $name = $row[$this->keyColumnName];
+            $key = $this->buildCacheKey($name, $event->data);
 
             $result[$name] = $value;
-            $this->_data[$name] = $value;
+            $this->_data[$key] = $value;
         }
 
         return $result;
@@ -160,9 +180,10 @@ class Settings extends Component
      */
     public function remove($name)
     {
+        $event = $this->beforeExecute();
+        $key = $this->buildCacheKey($name, $event->data);
         $where = [$this->keyColumnName => $name];
 
-        $event = $this->beforeExecute();
         if ($event->data) {
             $where = array_merge($event->data, $where);
         }
@@ -172,7 +193,7 @@ class Settings extends Component
             ->delete($this->tableName, $where)
             ->execute();
 
-        unset($this->_data[$name]);
+        unset($this->_data[$key]);
     }
 
     /**
@@ -202,12 +223,6 @@ class Settings extends Component
             ->select([$this->valueColumnName])
             ->from($this->tableName);
 
-        $event = $this->beforeExecute();
-
-        if ($event->data) {
-            $query->andWhere($event->data);
-        }
-
         if ($name) {
             $query->andWhere([$this->keyColumnName => $name]);
         }
@@ -224,6 +239,20 @@ class Settings extends Component
         $event = new Event();
         $this->trigger(self::EVENT_BEFORE_EXECUTE, $event);
         return $event;
+    }
+
+    /**
+     * Builds the unique cache key
+     * @param string $name
+     * @param array $data
+     * @return void
+     */
+    protected function buildCacheKey($name, $data)
+    {
+        if ($data) {
+            return Json::encode($data) . $name;
+        }
+        return $name;
     }
 
 }

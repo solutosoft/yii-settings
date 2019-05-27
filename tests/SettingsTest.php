@@ -48,6 +48,7 @@ class SettingsTest extends TestCase
         ]);
 
         $settings->set('website', 'http://example.org');
+        $this->assertEquals('http://example.org', $settings->get('website'));
 
         $query = (new Query())
             ->from($settings->tableName)

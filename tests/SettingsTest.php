@@ -1,8 +1,8 @@
 <?php
 
-namespace Soluto\Settings\Tests;
+namespace solutosoft\settings\tests;
 
-use Soluto\Settings\Settings;
+use solutosoft\settings\Settings;
 use yii\db\Query;
 
 class SettingsTest extends TestCase

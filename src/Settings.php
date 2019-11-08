@@ -1,6 +1,6 @@
 <?php
 
-namespace Soluto\Settings;
+namespace solutosoft\settings;
 
 use Yii;
 use yii\base\Component;

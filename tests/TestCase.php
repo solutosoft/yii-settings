@@ -1,6 +1,6 @@
 <?php
 
-namespace Soluto\Settings\Tests;
+namespace solutosoft\settings\Tests;
 
 use Yii;
 use yii\base\NotSupportedException;

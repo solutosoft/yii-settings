@@ -34,7 +34,7 @@ To use the Setting Component, you need to configure the components array in your
 ```php
 'components' => [
     'settings' => [
-        'class' => 'Soluto\Settings\Settings',
+        'class' => 'solutosoft\settings\Settings',
     ],
 ],
 ```
@@ -69,7 +69,7 @@ You can use `beforeExecute` event to store extra values and apply extra conditio
 
 'components' => [
     'settings' => [
-        'class' => 'Soluto\Settings\Settings',
+        'class' => 'solutosoft\settings\Settings',
         'on beforeExecute' => function ($event) {
             $event->data = ['user_id' => Yii::$app->user->id];
         }

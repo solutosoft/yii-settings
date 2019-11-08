@@ -32,8 +32,8 @@
     },
     "autoload": {
         "psr-4": {
-          "Soluto\\Settings\\": "src",
-          "Soluto\\Settings\\Tests\\": "tests"
+          "solutosoft\\settings\\": "src",
+          "solutosoft\\settings\\tests\\": "tests"
         }
     }
 }

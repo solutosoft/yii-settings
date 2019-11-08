@@ -1,8 +1,10 @@
 Yii Settings Change Log
 =======================
 
-1.1.1 under development
------------------------
+2.0.0 Nov 08, 2019
+------------------
+
+- Renamed namespace from `Soluto\Settings` to `solutosoft\settings`
 
 1.1.0 May 27, 2019
 ------------------

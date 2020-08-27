@@ -149,6 +149,10 @@ class Settings extends Component
         $query = $this->createQuery()
             ->addSelect($this->keyColumnName);
 
+        if ($event->data) {
+            $query->andWhere($event->data);
+        }
+
         $rows = $query->all($this->getDb());
 
         foreach ($rows as $row) {

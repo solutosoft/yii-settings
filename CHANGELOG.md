@@ -1,6 +1,11 @@
 Yii Settings Change Log
 =======================
 
+2.0.1 Ago 27, 2020
+------------------
+
+- Fixes `Settings::all` method using `beforeExecute` event
+
 2.0.0 Nov 08, 2019
 ------------------
 

@@ -3,6 +3,7 @@
 namespace solutosoft\settings\tests;
 
 use solutosoft\settings\Settings;
+use Yii;
 use yii\db\Query;
 
 class SettingsTest extends TestCase
@@ -50,17 +51,14 @@ class SettingsTest extends TestCase
         $settings->set('website', 'http://example.org');
         $this->assertEquals('http://example.org', $settings->get('website'));
 
-        $query = (new Query())
-            ->from($settings->tableName)
-            ->where(['user_id' => 1]);
+        Yii::$app->db->createCommand()->insert('setting', [
+            'key' => 'website',
+            'value' => 'http://test.org',
+            'user_id' => 2
+        ])->execute();
 
-        $rows = $query->all();
-
-        $this->assertCount(1, $rows);
-        $this->assertEquals([
-            'key' => 'website' ,
-            'value' => 'http://example.org',
-            'user_id' => 1
-        ], $rows[0]);
+        $values = $settings->all();
+        $this->assertCount(1, $values);
+        $this->assertEquals(['website' => 'http://example.org'], $values);
     }
 }

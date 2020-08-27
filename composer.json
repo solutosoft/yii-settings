@@ -13,11 +13,9 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/solutosoft/yii-multitenant/issues?state=open",
-        "source": "https://github.com/solutosoft/yii-multitenant"
+        "issues": "https://github.com/solutosoft/yii-settings/issues?state=open",
+        "source": "https://github.com/solutosoft/yii-settings"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "repositories": [
         {
           "type": "composer",
@@ -35,5 +33,10 @@
           "solutosoft\\settings\\": "src",
           "solutosoft\\settings\\tests\\": "tests"
         }
+    },
+    "extra": {
+      "branch-alias": {
+        "dev-master": "2.0.x-dev"
+      }
     }
 }

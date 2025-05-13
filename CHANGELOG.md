@@ -1,6 +1,11 @@
 Yii Settings Change Log
 =======================
 
+2.1.0 Mai 13, 2025
+------------------
+
+- Ensure boolean values are converted to integers before saving settings
+
 2.0.1 Ago 27, 2020
 ------------------
 

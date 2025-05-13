@@ -11,7 +11,7 @@ class SettingsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockApplication();
     }
@@ -23,18 +23,21 @@ class SettingsTest extends TestCase
         $settings->set('key1', 999);
         $this->assertEquals(999, $settings->get('key1'));
 
-        $settings->set('key1', 'test');
-        $this->assertEquals('test', $settings->get('key1'));
+        $settings->set('key2', 'test');
+        $this->assertEquals('test', $settings->get('key2'));
+
+        $settings->set('key3', false);
+        $this->assertEquals(0, $settings->get('key3'));
 
         $this->assertEquals('default', $settings->get('key-default', 'default'));
 
-        $this->assertCount(1, $settings->all());
-
-        $settings->save(['key3' => 'value3', 'key4' => 'value4']);
         $this->assertCount(3, $settings->all());
 
+        $settings->save(['key3' => 'value3', 'key4' => 'value4']);
+        $this->assertCount(4, $settings->all());
+
         $settings->remove('key1');
-        $this->assertCount(2, $settings->all());
+        $this->assertCount(3, $settings->all());
 
         $settings->removeAll();
         $this->assertEmpty($settings->all());

@@ -2,6 +2,7 @@
 
 namespace solutosoft\settings\Tests;
 
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\base\UnknownMethodException;
@@ -13,7 +14,7 @@ use yii\test\BaseActiveFixture;
 /**
  * This is the base class for all unit tests.
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends BaseTestCase
 {
     use FixtureTrait;
 
@@ -22,7 +23,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * Attempts to load vendor autoloader.
      * @throws \yii\base\NotSupportedException
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $vendorDir = __DIR__ . '/../vendor';
         $vendorAutoload = $vendorDir . '/autoload.php';
@@ -38,7 +39,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->unloadFixtures();
         $this->destroyApplication();

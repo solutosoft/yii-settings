@@ -114,7 +114,7 @@ class Settings extends Component
         $event = $this->beforeExecute();
 
         $key = $this->buildCacheKey($name, $event->data);
-        $values = [$this->valueColumnName => $value];
+        $values = [$this->valueColumnName => is_bool($value) ? (int)$value : $value];
         $where = [$this->keyColumnName => $name];
 
         if ($event->data) {
